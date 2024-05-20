@@ -1,11 +1,10 @@
-Copy code
 FROM ruby:2.7
 
 # Set working directory
 WORKDIR /app
 
 # Copy the Gemfile and Gemfile.lock
-COPY Gemfile* ./
+COPY Gemfile Gemfile.lock ./
 
 # Install dependencies
 RUN bundle install
