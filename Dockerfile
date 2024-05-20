@@ -1,27 +1,22 @@
-# Use an official Ruby runtime as a parent image
-FROM ruby:2.7.8
+FROM ruby:2.7
 
-# Set environment variables
-ENV RACK_ENV=production
-ENV REDIS_URL=localhost
+# Set working directory
+WORKDIR /app
+
+# Copy the Gemfile, Gemfile.lock, and gemspec file
+COPY Gemfile *.gemspec ./
 
 # Install dependencies
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
-
-# Set the working directory
-WORKDIR /usr/src/app
-
-# Copy the Gemfile and Gemfile.lock into the image
-COPY Gemfile ./
-
-# Install gems
 RUN bundle install
 
 # Copy the rest of the application code
 COPY . .
 
-# Expose port 3000 for the web server
+# Set environment variable
+ENV REDIS_URL=localhost
+
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start the application
-CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0"]
+# Command to run the application
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
